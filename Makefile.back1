@@ -1,0 +1,61 @@
+#---1.Make-basic:Target,Prerequisite and Recipe（目标，先决条件，动作）
+#main: main.o hello.o
+#	gcc -o main main.o hello.o
+
+#main.o: main.c hello.h
+#	gcc -c main.c -o main.o
+
+#hello.o:hello.c hello.h
+#	gcc -c hello.c -o hello.o
+
+#---2.Make-advanced knowledge(variables)
+#LD = gcc
+#CC = gcc
+#CFLAGS = -Wall
+#OBJECTS = main.o hello.o
+
+#all: main
+
+#main: $(OBJECTS)
+#	$(LD) -o main $(OBJECTS)
+
+#main.o: main.c hello.h
+#	$(CC) $(CFLAGS) -c $< -o $@
+
+#hello.o:hello.c hello.h
+#	$(CC) $(CFLAGS) -c hello.c -o hello.o
+
+#---3.implicit rules: Make can automatically compile .c files into .o files,
+#and for prerequisites,Make can automatically search .c file for .o.
+
+#LD = gcc
+#OBJECTS = main.o hello.o
+
+#all = main
+
+#main:$(OBJECTS)
+#	$(LD) -o main $(OBJECTS)
+
+#main.o:hello.h
+
+#hello.o:hello.h
+
+#--4.模式规则:支持模式匹配，更灵活，例如我们定义目标名匹配%.o和先决条件匹配%.c的话，就执行编译命令。
+#这样main.o和hello.o被简化的同事，还对其进行了精确的控制。
+LD = gcc
+CC = gcc
+CFLAGS = -Wall
+OBJECTS = main.o hello.o
+
+%.o:%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+all: main
+
+main:$(OBJECTS)
+	$(LD) -o main $(OBJECTS)
+
+main.o:main.c hello.h
+
+hello.o:hello.c hello.h
+
